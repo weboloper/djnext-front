@@ -2,9 +2,8 @@
 import React from "react";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "@/store/auth/authActions";
+import { logout, login } from "@/store/auth/authActions";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import Avatar from "@/components/layout/Avatar";
 
 const UserNav = () => {
@@ -12,10 +11,12 @@ const UserNav = () => {
     (state) => state.auth
   );
   const dispatch = useDispatch();
-  const router = useRouter();
   const logoutHandler = async () => {
-    const check_logout = await dispatch(logout());
-    router.refresh();
+    dispatch(logout());
+  };
+  const loginHandler = async (e) => {
+    e.preventDefault();
+    dispatch(login("admin@admin.com", "123123"));
   };
   if (isLoading) return <></>;
   return (
@@ -52,9 +53,14 @@ const UserNav = () => {
           </ul>
         </li>
       ) : (
-        <Link href="/login" className="btn btn-primary">
-          Giriş
-        </Link>
+        <>
+          <a onClick={loginHandler} className="btn btn-info me-2">
+            Quick Login
+          </a>
+          <Link href="/login" className="btn btn-primary">
+            Giriş
+          </Link>
+        </>
       )}
     </ul>
   );
